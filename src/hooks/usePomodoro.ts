@@ -2,7 +2,7 @@ import { useCallback, useEffect, useReducer, useRef } from "react";
 import { durationMs } from "../lib/modes";
 import type { Mode, Settings, Status } from "../types";
 
-interface TimerState {
+export interface TimerState {
   mode: Mode;
   status: Status;
   total: number;
@@ -27,7 +27,7 @@ function nextStep(state: TimerState, settings: Settings): { mode: Mode; cycle: n
   return { mode: "focus", cycle: state.mode === "long" ? 0 : state.cycle };
 }
 
-function reducer(state: TimerState, action: Action): TimerState {
+export function reducer(state: TimerState, action: Action): TimerState {
   switch (action.type) {
     case "start":
       if (state.status === "running" || state.remaining <= 0) return state;

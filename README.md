@@ -32,6 +32,7 @@ A focus timer built with React and TypeScript, based on the Pomodoro technique. 
 - [Tailwind CSS v4](https://tailwindcss.com/)
 - [Lucide](https://lucide.dev/) icons
 - [Fontsource](https://fontsource.org/) for self-hosted Barlow Condensed and Instrument Sans
+- [Vitest](https://vitest.dev/) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) for tests
 
 ## Getting started
 
@@ -51,10 +52,19 @@ Then open http://localhost:5173.
 | `npm run dev`     | Starts the dev server               |
 | `npm run build`   | Type-checks and builds to `dist/`   |
 | `npm run preview` | Serves the production build locally |
+| `npm test`        | Runs the tests in watch mode        |
+| `npm run test:run` | Runs the tests once                |
 
 ## How the timer works
 
 The timer state lives in a `useReducer` inside the `usePomodoro` hook. When a session starts, the hook stores the exact time it should end instead of counting down one second at a time. Every tick recalculates the time left from that end time, so the countdown stays accurate even if the browser slows down timers in a background tab. When the time runs out, the hook records the session, plays the alert, and moves to the next mode.
+
+## Tests
+
+- **Timer rules** (`usePomodoro.reducer.test.ts`): the reducer is a pure function, so each test passes in a state and an action and checks the result. Covers start, pause and resume, drift-free ticking, and the focus → break → long break cycle.
+- **The hook** (`usePomodoro.test.ts`): fake timers run full sessions in milliseconds and check that a finished session calls back once and moves to the right break.
+- **Controls** (`Controls.test.tsx`): renders the buttons and clicks them the way a user would, finding them by role and label.
+- **Formatting** (`time.test.ts`): the clock and duration helpers, including rounding and edge cases.
 
 ## Deploying
 
